@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <ctype.h>
 #include <stdio.h>
 
 void hex_inspect(char *, int);
@@ -6,21 +7,15 @@ int mgetline(char **line);
 void ncopy(char *into, char *from, int n);
 
 void main(){
-  char *max_line = malloc(1);
   char *current;
   int csize;
-  int msize = 0;
+  int i = 0;
   while ((csize = mgetline(&current)) > 0) { 
-    if (csize > msize) {
-      msize = csize;
-      free(max_line);
-      max_line = current;
-    } else { 
-      free(current);
-    }
+    i ++;
+    printf("line %d, %d characters\n", i, csize);
+    printf("%s", current);
+    free(current);
   }
-  printf("Max line size: %d\n", msize);
-  printf("%s", max_line);
 }
 
 int mgetline(char **line){
@@ -37,9 +32,12 @@ int mgetline(char **line){
     }
     buf[i] = c;
   }
-  if (i == 0)
+  int is_newline = c == '\n';
+  if (i <= 0)
     return 0;
-  if (c == '\n')
+  for (int j = i - 1; isspace(buf[j]); j --)
+    i --;
+  if (is_newline)
     buf[i++] = '\n';
   buf[i] = '\0';
   *line = buf;

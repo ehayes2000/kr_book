@@ -6,21 +6,17 @@ int mgetline(char **line);
 void ncopy(char *into, char *from, int n);
 
 void main(){
-  char *max_line = malloc(1);
   char *current;
   int csize;
-  int msize = 0;
+  int i = 0;
   while ((csize = mgetline(&current)) > 0) { 
-    if (csize > msize) {
-      msize = csize;
-      free(max_line);
-      max_line = current;
-    } else { 
+    i ++;
+    if (csize > 80){
+      printf("line %d, %d characters\n", i, csize);
+      printf("%s", current);
       free(current);
     }
   }
-  printf("Max line size: %d\n", msize);
-  printf("%s", max_line);
 }
 
 int mgetline(char **line){
